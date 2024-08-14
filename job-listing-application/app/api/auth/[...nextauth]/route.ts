@@ -19,8 +19,6 @@ const handler = NextAuth({
 
       },
       authorize: async (credentials) => {
-        console.log("melllo")
-
         const res = await fetch('https://akil-backend.onrender.com/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -31,9 +29,6 @@ const handler = NextAuth({
         });
 
         const user = await res.json();
-
-        console.log("signed in user", user.data)
-
         if (res.ok && user.data) {
           return user.data;
         } else {
@@ -49,19 +44,16 @@ const handler = NextAuth({
 
       },
       authorize: async (credentials) => {
-        console.log("verify my a**", credentials)
         const res = await fetch('https://akil-backend.onrender.com/verify-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: credentials?.email,
-            password: credentials?.OTP
+            OTP: credentials?.OTP
           }),
         });
 
         const user = await res.json();
-
-        console.log("verified user", user.data)
 
         if (res.ok && user.data) {
           return user.data;
@@ -79,11 +71,9 @@ const handler = NextAuth({
   
   callbacks: {
     async session({ session, token }) {
-      console.log('ses', session, token)
       return session;
     },
     async jwt({ token, user }) {
-      console.log("ayo jwt", user, token)
       if (user) {
         token.id = user.id;
         token.email = user.email;

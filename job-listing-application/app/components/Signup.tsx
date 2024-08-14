@@ -5,6 +5,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useSignupMutation } from '../api/apiSlice';
 import { useRouter } from 'next/navigation';
+import Spinner from './Spinner';
+import Error from './Error';
 
 interface SignUpFormValues {
   fullname: string;
@@ -27,58 +29,50 @@ const Signup = () => {
     
 
     const onSubmit = async (data: SignUpFormValues) => {
-        // Handle the sign-up logic here, for example:
-        // - Call your RTK Query signup mutation
-        // - Redirect the user or show an error message
-
-        // Example:
-        try {
-            // console.log("user", data)
-            // await signup(data).unwrap();
-            await signup({
-                name: data.fullname,
-                password: data.password,
-                confirmPassword: data.confirmPassword,
-                role: "user",
-                email: data.email,
-            })
-            console.log('signnnup', isLoading)
-            if(isSuccess){
-                console.log("success signup data", signupData)
-            }
-          
-
-        } catch (err) {
-            console.error('Sign-up failed:', err);
-        }
+        
+        await signup({
+            name: data.fullname,
+            password: data.password,
+            confirmPassword: data.confirmPassword,
+            role: "user",
+            email: data.email,
+        })
     };
 
+    const validatePassword = (value: string) => {
+        if(value.length < 6){
+            return "Password must be atleast six characters long"
+        }
+        const hasLetter = /[a-zA-Z]/.test(value);
+        if (!hasLetter) {
+            return "Password must include at least one letter";
+        }
+        
+        const hasNumber = /[0-9]/.test(value);
+        if (!hasNumber) {
+            return "Password must include at least one number";
+        }
+        
+        return true;
+        
+    }
+
     if(isLoading)
-        return <h1>loading</h1>
+        return <Spinner />
 
     if(isSuccess){
         router.push(`/verify-email?email=${watch('email')}`)
     }
-        // return <h1>success {signupData.message}</h1>
     
     if(isError)
-        return <h1>Error</h1>
+        return <Error message='Error signing you up. Try again later' />
 
     return (
         <div className='py-8 flex flex-col items-center'>
             
             <h1 className='font-heading text-dark-blue font-black text-3xl'>Sign Up Today!</h1>
 
-            {/* {session.status === "authenticated" && (
-                <button className='border border-blue-400 rounded-md mt-9 p-4 hover:bg-blue-400' onClick={() => signOut()}>
-                    Sign out
-                </button>
-            )} */}
-            
-
-            {session.data?.user?.email}
-
-            <div className='w-3/5 md:w-4/7'>
+            <div className='w-2/4 md:w-4/7'>
                 <button
                     className='flex gap-4 justify-center mb-8 border font-body font-bold text-base h-12 w-full border-brighter-grey text-purple-tag rounded-md mt-6 p-4 hover:shadow-md hover:shadow-gray-100'
                     onClick={() => signIn('google', { callbackUrl: '/landing' })}
@@ -150,6 +144,7 @@ const Signup = () => {
                                     value: true,
                                     message: 'Password is required'
                                 },
+                                validate: (value) => validatePassword(value)
                             })}
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
@@ -172,7 +167,7 @@ const Signup = () => {
                         />
                         {errors.confirmPassword && <p className="text-red-500 text-sm mt-2">{errors.confirmPassword.message}</p>}
                     </div>
-                    <button type='submit' className='bg-purple-tag text-white font-body font-normal w-full rounded-full h-12'>
+                    <button type='submit' className='bg-purple-tag hover:shadow-md hover:shadow-gray-500 text-white font-body font-normal w-full rounded-full h-12'>
                         Continue
                     </button>
                 </form>

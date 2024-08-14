@@ -23,14 +23,6 @@ const VerifyEmail = ({email}: {email: string}) => {
         setValues(newvalue)
     }
 
-    // if(isSuccess)
-    //     return <h1>Success</h1>
-    // if(isError)
-    //     return <h1>Error</h1>
-
-    // if(isLoading)
-    //     return <h1>Is loading .</h1>
-
   return (
     <div className="w-96 flex flex-col items-center gap-16 justify-center">
         

@@ -15,26 +15,18 @@ const Signin = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignInFormValues>();
+    } = useForm<SignInFormValues>({
+        mode: 'onBlur'
+    });
 
     const onSubmit = async (data: SignInFormValues) => {
-        // Handle the sign-up logic here, for example:
-        // - Call your RTK Query signup mutation
-        // - Redirect the user or show an error message
-
-        // Example:
-        try {
-            console.log("user", data)
-            // await signup(data).unwrap();
             await signIn('sign-in', {
                 
                 password: data.password,
                 email: data.email,
                 callbackUrl:`/landing`
             });
-        } catch (err) {
-            console.error('Sign-in failed:', err);
-        }
+      
     };
 
     return (
@@ -45,18 +37,9 @@ const Signin = () => {
                 <hr className="flex-1 border-t border-light-grey"/>
                 <hr className="flex-1 border-t border-light-grey"/>
             </div>
-            {session.status === "authenticated" && (
-                <button className='border border-blue-400 rounded-md mt-9 p-4 hover:bg-blue-400' onClick={() => signOut()}>
-                    Sign out
-                </button>
-            )}
-
-            {session.data?.user?.email}
-
+            
             <div className='w-3/5 md:w-4/7'>
                 
-
-
                 <form onSubmit={handleSubmit(onSubmit)} noValidate>
                     
                     <div className="mb-4">
@@ -77,7 +60,7 @@ const Signin = () => {
                                 }                   
                              })}
                         />
-                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+                        {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
                     </div>
                     <div className="mb-4">
                         <label className='block full text-light-black font-semibold text-base mb-2' htmlFor="password">Password</label>
@@ -93,7 +76,7 @@ const Signin = () => {
                                 },
                             })}
                         />
-                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                        {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password.message}</p>}
                     </div>
                   
                     <button type='submit' className='bg-purple-tag text-white font-body font-normal w-full rounded-full h-12'>

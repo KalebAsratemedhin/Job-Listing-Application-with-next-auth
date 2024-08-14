@@ -1,8 +1,5 @@
 import JobPost from '@/app/types/JobPost';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { AuthUser } from '../types/AuthUser';
-
-
 
 interface Credential{
   name: string;
