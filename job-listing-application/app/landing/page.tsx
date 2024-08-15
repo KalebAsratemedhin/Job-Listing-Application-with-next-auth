@@ -3,6 +3,8 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
+import Spinner from '../components/Spinner'
+import { notFound } from 'next/navigation'
 
 const LandingPage = () => {
     const session = useSession()
@@ -34,7 +36,9 @@ const LandingPage = () => {
                 </section>
             </main>
         )
-    else return <h1>{session.status}</h1>
+    else if(session.status === "loading")
+        return <Spinner />
+    else return notFound()
 }
 
 export default LandingPage

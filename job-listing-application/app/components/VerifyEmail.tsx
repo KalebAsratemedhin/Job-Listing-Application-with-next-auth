@@ -9,11 +9,8 @@ const VerifyEmail = ({email}: {email: string}) => {
     const [values, setValues] = useState<string[]>(Array(4).fill('')); 
     const handleContinue = () => {
         const OTP = values.join("")
-        email  = email.toWellFormed()
-        console.log("email, otp", {email, OTP})
 
         if(email && OTP){
-            console.log("email, otp", {email, OTP})
             signIn('verify', {email, OTP, callbackUrl: '/landing'})
 
         }
