@@ -1,7 +1,6 @@
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from 'next-auth/providers/credentials';
- 
 
 const handler = NextAuth({
   providers: [
@@ -32,7 +31,7 @@ const handler = NextAuth({
         if (res.ok && user.data) {
           return user.data;
         } else {
-          return null;
+          return null
         }
       },
     }),
@@ -43,7 +42,7 @@ const handler = NextAuth({
         OTP: { label: 'OTP', type: 'text' },
 
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials) =>  {
         const res = await fetch('https://akil-backend.onrender.com/verify-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -53,7 +52,7 @@ const handler = NextAuth({
           }),
         });
 
-        const user = await res.json();
+        const user  = await res.json();
 
         if (res.ok && user.data) {
           return user.data;
@@ -68,20 +67,31 @@ const handler = NextAuth({
     verifyRequest: "/verify-email"
     
   },
-  
   callbacks: {
-    async session({ session, token }) {
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
+    async jwt({ token, user, account }) {
+      if (account?.provider === 'sign-in' || account?.provider === 'verify') {
+        token.accessToken = user.accessToken;
       }
 
+      if (account?.provider === 'google') {
+        token.accessToken = account.id_token;
+      }
+      console.log("token", token,'user', user, 'account', account)
+  
       return token;
     },
-  },
+  
+    async session({ session, token }) {
+      session.user = {
+        ...session.user,
+        accessToken: token.accessToken as string
+      };
+      console.log("session", token, session)
+      
+      return session;
+    }
+  }
+  
 });
 
 export { handler as GET, handler as POST };

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import SessionWrapper from "./components/SessionWrapper";
+import Link from "next/link";
+import Navbar from "./components/Navbar";
 
 const inter = Inter({ subsets: ["latin"]});
 
@@ -27,6 +29,7 @@ export default function RootLayout({
               type="image/<generated>"
               sizes="<generated>"
             />
+          
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" />
             <link
@@ -37,7 +40,15 @@ export default function RootLayout({
             <link rel="preconnect" href="https://fonts.gstatic.com"  />
             <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"></link>
           </head>
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className}>
+            <Navbar> 
+            </Navbar>
+          
+          <main>
+            {children}
+          </main>
+            
+          </body>
         </html>
       </StoreProvider>
     </SessionWrapper>

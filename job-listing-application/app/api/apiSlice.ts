@@ -13,8 +13,15 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://akil-backend.onrender.com' }),
   endpoints: builder => ({
-    getAllJobs: builder.query<{data: JobPost[]}, void>({
-      query: () => '/opportunities/search'
+    getAllJobs: builder.query<{data: JobPost[]}, string>({
+      query: (token) => ({
+        url: '/opportunities/search',
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
     }),
     getJobById: builder.query<{data: JobPost}, string>({
       query: postId => `/opportunities/${postId}`,

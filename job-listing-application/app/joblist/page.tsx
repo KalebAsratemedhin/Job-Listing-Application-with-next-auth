@@ -3,12 +3,22 @@ import JobCard from "../components/JobCard"
 import Spinner from "../components/Spinner"
 import Error from "../components/Error"
 import { useGetAllJobsQuery } from '@/app/api/apiSlice'
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 
 
 const page = () => {
-    const {data, isError, error, isLoading, isSuccess} = useGetAllJobsQuery()
+    const session = useSession()
+    const accessToken = session.data?.user?.accessToken as string
+    const {data, isError, error, isLoading, isSuccess} = useGetAllJobsQuery(accessToken)
     const jobPosts = data?.data
+    const router = useRouter()
+
+    console.log("session from job list", session)
+
+    if(session.status === "unauthenticated")
+        router.push('/signup')
 
     if(isLoading)
         return <Spinner />

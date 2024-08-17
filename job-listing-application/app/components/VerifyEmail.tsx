@@ -10,10 +10,10 @@ const VerifyEmail = ({email}: {email: string}) => {
     const handleContinue = () => {
         const OTP = values.join("")
 
-        if(email && OTP){
-            signIn('verify', {email, OTP, callbackUrl: '/landing'})
+        // if(email && OTP){
+        //     signIn('verify', {email, OTP, callbackUrl: '/landing'})
 
-        }
+        // }
     }
 
     const hanldeSetValues = (newvalue: string[]) => {
@@ -35,7 +35,7 @@ const VerifyEmail = ({email}: {email: string}) => {
                 <PinEntry handleSetValues={hanldeSetValues} values={values}></PinEntry>
            </div>
             <p className="font-body text-sm font-normal text-grey-subtitle">You can request to <span className="font-body text-sm font-semibold text-purple-tag">Resend code</span> in <span className="font-body text-sm font-semibold text-purple-tag">0:30</span> </p>
-            <button onClick={handleContinue} type='button' className='bg-purple-tag text-white  font-body font-normal w-full rounded-full h-12'>Continue</button>
+            <button onClick={handleContinue} type='button' disabled={values.join("").length !== 4} className='disabled:bg-gray-400 bg-purple-tag text-white  font-body font-normal w-full rounded-full h-12'>Continue</button>
 
         </div>
     </div>
