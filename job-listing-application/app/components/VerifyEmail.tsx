@@ -10,10 +10,10 @@ const VerifyEmail = ({email}: {email: string}) => {
     const handleContinue = () => {
         const OTP = values.join("")
 
-        // if(email && OTP){
-        //     signIn('verify', {email, OTP, callbackUrl: '/landing'})
+        if(email && OTP){
+            signIn('verify', {email, OTP, callbackUrl: '/landing'})
 
-        // }
+        }
     }
 
     const hanldeSetValues = (newvalue: string[]) => {
